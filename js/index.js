@@ -1,11 +1,14 @@
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
-
+canvas.width = innerWidth;
+    canvas.height = innerHeight
 window.onresize = function(){
     canvas.width = innerWidth;
     canvas.height = innerHeight
 }
 class Boundary {
+    static width = 40;
+    static height = 40;
     constructor({ position }) {
         this.position = position
         this.width = 40
@@ -19,20 +22,21 @@ class Boundary {
 }
 const map = [
     ['-', '-', '-', '-', '-', '-'],
-    ['-', '-', '-', '-', '-', '-'],
-    ['-', '-', '-', '-', '-', '-'],
+    ['-', ' ', ' ', ' ', ' ', '-'],
+    ['-', ' ', '-', '-', ' ', '-'],
+    ['-', ' ', ' ', ' ', ' ', '-'],
     ['-', '-', '-', '-', '-', '-']
 ]
 const boundaries = []
-map.forEach((row) => {
-    row.forEach((symbol) => {
+map.forEach((row, i) => {
+    row.forEach((symbol, j) => {
         switch (symbol) {
             case '-':
                 boundaries.push(
                     new Boundary({
                         position: {
-                            x: 0,
-                            y: 0
+                            x: Boundary.width * j,
+                            y: Boundary.height * i
                         }
                     })
                 )
@@ -41,8 +45,8 @@ map.forEach((row) => {
     })
 })
 
-boundaries.forEach((boudary) => {
-    Boundary.draw()
+boundaries.forEach((boundary) => {
+    boundary.draw()
 })
 
 
