@@ -43,13 +43,6 @@ class Player {
     }
 }
 
-const map = [
-    ['-', '-', '-', '-', '-', '-'],
-    ['-', ' ', ' ', ' ', ' ', '-'],
-    ['-', ' ', '-', '-', ' ', '-'],
-    ['-', ' ', ' ', ' ', ' ', '-'],
-    ['-', '-', '-', '-', '-', '-']
-]
 const boundaries = []
 const player = new Player({
     position: {
@@ -61,6 +54,30 @@ const player = new Player({
       y:0  
     }
 })
+const keys = {
+    w: {
+        pressed: false
+    },
+    a: {
+        pressed: false
+    },
+    s: {
+        pressed: false
+    },
+    d: {
+        pressed: false
+    }
+}
+
+let lastKey = ''
+
+const map = [
+    ['-', '-', '-', '-', '-', '-'],
+    ['-', ' ', ' ', ' ', ' ', '-'],
+    ['-', ' ', '-', '-', ' ', '-'],
+    ['-', ' ', ' ', ' ', ' ', '-'],
+    ['-', '-', '-', '-', '-', '-']
+]
 
 map.forEach((row, i) => {
     row.forEach((symbol, j) => {
@@ -79,62 +96,91 @@ map.forEach((row, i) => {
     })
 })
 
+
 function animate() {
     requestAnimationFrame(animate)
+    c.clearRect(0, 0, canvas.width, canvas.height)
     boundaries.forEach((boundary) => {
     boundary.draw()
+    
+       if (
+        player.position.x - player.radius + player.velocity.y <= 
+        boundary.position.y + boundary.height && 
+        player.position.x + player.radius + player.velocity.x >= boundary.position.
+        x && 
+        player.position.y + player.radius + player.velocity.y >= boundary.position.
+        y && 
+        player.position.x - player.radius + player.velocity.x<= boundary.position.
+        x + boundary.width) {
+        console.log('we are colliding')
+        player.velocity.x = 0
+        player.velocity.y = 0
+     }
     })
 
     player.update()
+    player.velocity.x = 0
+    player.velocity.y = 0
+
+    if (keys.w.pressed && lastKey === 'w') {
+        player.velocity.y = -5
+    } else if (keys.a.pressed && lastKey === 'a') {
+        player.velocity.x = -5
+    } else if (keys.s.pressed && lastKey === 's') {
+        player.velocity.y = 5
+    } else if (keys.d.pressed && lastKey === 'd') {
+        player.velocity.x = 5
+    }
 }
 
 animate()
 
-// boundaries.forEach((boundary) => {
-//     boundary.draw()
-// })
-
-// player.update()
-
 addEventListener('keydown', ({ key }) => {
-    // console.log(key)
     switch (key) {
         case 'w':
-        play.velocity.y = -5
+        keys.w.pressed = true
+        lastKey = 'w'
         break
         case 'a':
-        play.velocity.y = -5
+        keys.a.pressed = true
+        lastKey = 'a'
+
         break
         case 's':
-        play.velocity.y = -5
+        keys.s.pressed = true
+        lastKey = 's'
+
         break
         case 'd':
-        play.velocity.y = -5
+        keys.d.pressed = true
+        lastKey = 'd'
+
         break
     }
-
-    console.log(player.velocity)
 })
 
 addEventListener('keyup', ({ key }) => {
     // console.log(key)
     switch (key) {
         case 'w':
-        play.velocity.y = -5
-        break
+            keys.w.pressed = false
+            break
         case 'a':
-        play.velocity.y = -5
-        break
+            keys.a.pressed = false
+            break
         case 's':
-        play.velocity.y = -5
-        break
+            keys.s.pressed = false
+            break
         case 'd':
-        play.velocity.y = -5
-        break
+            keys.d.pressed = false
+            break
     }
-
-    console.log(player.velocity)
 })
+
+
+
+
+
 
 // class Boundary {
 //     constructor({ position }) {
