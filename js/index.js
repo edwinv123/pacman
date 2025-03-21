@@ -72,11 +72,11 @@ const keys = {
 let lastKey = ''
 
 const map = [
-    ['-', '-', '-', '-', '-', '-'],
-    ['-', ' ', ' ', ' ', ' ', '-'],
-    ['-', ' ', '-', '-', ' ', '-'],
-    ['-', ' ', ' ', ' ', ' ', '-'],
-    ['-', '-', '-', '-', '-', '-']
+    ['-', '-', '-', '-', '-', '-','-'],
+    ['-', ' ', ' ', ' ', ' ', ' ','-'],
+    ['-', ' ', '-', ' ', '-', ' ','-'],
+    ['-', ' ', ' ', ' ', ' ', ' ','-'],
+    ['-', '-', '-', '-', '-', '-','-']
 ]
 
 map.forEach((row, i) => {
@@ -96,10 +96,34 @@ map.forEach((row, i) => {
     })
 })
 
+function circleCollidesWithRectangle({
+    circle,
+    rectangle
+}) {
+    return ( player.position.x - player.radius + player.velocity.y <= 
+        boundary.position.y + boundary.height && 
+        player.position.x + player.radius + player.velocity.x >= boundary.position.
+        x && 
+        player.position.y + player.radius + player.velocity.y >= boundary.position.
+        y && 
+        player.position.x - player.radius + player.velocity.x<= boundary.position.
+        x + boundary.width)
+}
 
 function animate() {
     requestAnimationFrame(animate)
     c.clearRect(0, 0, canvas.width, canvas.height)
+
+    if (keys.w.pressed && lastKey === 'w') {
+        player.velocity.y = -5
+    } else if (keys.a.pressed && lastKey === 'a') {
+        player.velocity.x = -5
+    } else if (keys.s.pressed && lastKey === 's') {
+        player.velocity.y = 5
+    } else if (keys.d.pressed && lastKey === 'd') {
+        player.velocity.x = 5
+    }
+
     boundaries.forEach((boundary) => {
     boundary.draw()
     
@@ -111,8 +135,8 @@ function animate() {
         player.position.y + player.radius + player.velocity.y >= boundary.position.
         y && 
         player.position.x - player.radius + player.velocity.x<= boundary.position.
-        x + boundary.width) {
-        console.log('we are colliding')
+        x + boundary.width
+        ) {
         player.velocity.x = 0
         player.velocity.y = 0
      }
@@ -121,16 +145,6 @@ function animate() {
     player.update()
     player.velocity.x = 0
     player.velocity.y = 0
-
-    if (keys.w.pressed && lastKey === 'w') {
-        player.velocity.y = -5
-    } else if (keys.a.pressed && lastKey === 'a') {
-        player.velocity.x = -5
-    } else if (keys.s.pressed && lastKey === 's') {
-        player.velocity.y = 5
-    } else if (keys.d.pressed && lastKey === 'd') {
-        player.velocity.x = 5
-    }
 }
 
 animate()
